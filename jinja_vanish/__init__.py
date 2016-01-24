@@ -1,3 +1,6 @@
+from functools import wraps
+
+from markupsafe import Markup
 from jinja2 import Environment
 from jinja2.compiler import CodeGenerator
 
@@ -50,3 +53,13 @@ class DynEscapeAutoenvironment(Environment):
         if markup_class:
             self._codegen_overrides['markup'] = 'environment.markup_class'
             self.markup_class = markup_class
+
+
+def markup_escape_func(f):
+    @wraps(f)
+    def _(v):
+        if isinstance(v, Markup):
+            return v
+        return Markup(f(v))
+
+    return _
