@@ -18,14 +18,14 @@ class LocalOverridingCodeGenerator(CodeGenerator):
             self.writeline('{} = {}'.format(name, override))
 
 
-class DynEscapeAutoenvironment(Environment):
+class DynAutoEscapeEnvironment(Environment):
     code_generator_class = LocalOverridingCodeGenerator
 
     def __init__(self, *args, **kwargs):
         escape_func = kwargs.pop('escape_func', None)
         markup_class = kwargs.pop('markup_class', None)
 
-        super(DynEscapeAutoenvironment, self).__init__(*args, **kwargs)
+        super(DynAutoEscapeEnvironment, self).__init__(*args, **kwargs)
 
         # we need to disable constant-evaluation at compile time, because it
         # calls jinja's own escape function.

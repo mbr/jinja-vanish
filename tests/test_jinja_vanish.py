@@ -1,7 +1,7 @@
 # coding: utf8
 
 from markupsafe import Markup
-from jinja_vanish import DynEscapeAutoenvironment
+from jinja_vanish import DynAutoEscapeEnvironment
 from six import text_type
 import pytest
 
@@ -41,7 +41,7 @@ def tpl_src(escape_func, val_a, val_b):
 
 @pytest.fixture()
 def env(escape_func):
-    return DynEscapeAutoenvironment(autoescape=True, escape_func=escape_func)
+    return DynAutoEscapeEnvironment(autoescape=True, escape_func=escape_func)
 
 
 @pytest.fixture()

@@ -15,7 +15,7 @@ function to escape SQL for Postgres:
 
     from datetime import datetime
 
-    from jinja_vanish import DynEscapeAutoenvironment, markup_escape_func
+    from jinja_vanish import DynAutoEscapeEnvironment, markup_escape_func
     from psycopg2.extensions import adapt
 
     @markup_escape_func
@@ -25,7 +25,7 @@ function to escape SQL for Postgres:
         return adapt(v)
 
 
-    env = DynEscapeAutoenvironment(autoescape=True, escape_func=sql_escape)
+    env = DynAutoEscapeEnvironment(autoescape=True, escape_func=sql_escape)
     tpl = env.from_string('SELECT * FROM foo where post_date <= {{now}}')
 
     print(tpl.render(now=datetime.now()))
