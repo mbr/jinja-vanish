@@ -12,7 +12,7 @@ def read(fname):
 
 
 setup(name='jinja-vanish',
-      version='0.1.dev1',
+      version='0.2.dev1',
       description='Customizable auto-escaping for jinja2.',
       long_description=read('README.rst'),
       author='Marc Brinkmann',
