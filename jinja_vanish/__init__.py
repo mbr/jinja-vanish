@@ -1,6 +1,5 @@
 from jinja2 import Environment
 from jinja2.compiler import CodeGenerator
-from markupsafe import Markup
 
 
 class LocalOverridingCodeGenerator(CodeGenerator):
@@ -51,24 +50,3 @@ class DynEscapeAutoenvironment(Environment):
         if markup_class:
             self._codegen_overrides['markup'] = 'environment.markup_class'
             self.markup_class = markup_class
-
-
-def my_escape(v):
-    if isinstance(v, Markup):
-        return v
-    return Markup(v.replace('<', r'\<'))
-
-
-env = DynEscapeAutoenvironment(autoescape=True,
-                               escape_func=my_escape,
-                               finalize=lambda v: v)
-
-tpl = ('One Two. Autoescape: {{hello}}, |e: '
-       '{{hello|e}}, |escape {{hello|escape}}'
-       'safe: {{hello|safe}}\n\n'
-       '{{"testing << one two"}}')
-
-t = env.compile(tpl, raw=True)
-print(t)
-
-print(env.from_string(tpl).render(hello='he<<o'))
