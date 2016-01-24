@@ -1,5 +1,8 @@
+# coding: utf8
+
 from markupsafe import Markup
 from jinja_vanish import DynEscapeAutoenvironment
+from six import text_type
 import pytest
 
 
@@ -29,11 +32,11 @@ def tpl_src(escape_func, val_a, val_b):
 
     tpl = 'hello {{a}} \nworld {{b}}\nsafe {{a|safe}}\n escaped {{b|e}}\n.'
 
-    result = ('hello ' + str(escape_func(a)) + ' \nworld ' +
-              str(escape_func(b)) + '\nsafe ' + a + '\n escaped ' +
-              str(escape_func(b)) + '\n.')
+    result = ('hello ' + text_type(escape_func(a)) + ' \nworld ' +
+              text_type(escape_func(b)) + '\nsafe ' + a + '\n escaped ' +
+              text_type(escape_func(b)) + '\n.')
 
-    return tpl, str(result)
+    return tpl, text_type(result)
 
 
 @pytest.fixture()
