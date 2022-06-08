@@ -3,6 +3,10 @@ from functools import wraps
 from markupsafe import Markup
 from jinja2 import Environment
 from jinja2.compiler import CodeGenerator
+try:
+    from jinja2.utils import pass_context  # jinja2 3.x
+except ImportError:
+    from jinja2.utils import contextfunction as pass_context  # jinja2 2.x
 
 
 class LocalOverridingCodeGenerator(CodeGenerator):
@@ -35,12 +39,15 @@ class DynAutoEscapeEnvironment(Environment):
         # suppling a no-op contextfunction itself or wrapping an existing
         # finalize in a contextfunction
         if self.finalize:
-            if not getattr(self.finalize, 'contextfunction', False):
+            if not (
+                getattr(self.finalize, 'contextfunction', False)  # jinja2 2.x
+                or getattr(self.finalize, 'jinja_pass_arg', False)  # jinja2 3.x
+            ):
                 _finalize = getattr(self, 'finalize')
                 self.finalize = lambda _, v: _finalize(v)
         else:
             self.finalize = lambda _, v: v
-        self.finalize.contextfunction = True
+        pass_context(self.finalize)
 
         self._codegen_overrides = {}
 
